@@ -1,0 +1,55 @@
+# Aplikacja do generowania HTML z artykułów przy użyciu OpenAI
+
+## Opis
+
+Aplikacja pozwala na przetworzenie tekstu artykułu w pliku `.txt` na kod HTML, który jest zgodny z wytycznymi OpenAI. Po wczytaniu pliku aplikacja łączy się z API OpenAI, przesyła treść artykułu oraz odpowiedni prompt, a następnie generuje HTML z użyciem odpowiednich tagów, takich jak `<img>` dla miejsc, w których mogą znaleźć się obrazy. Wygenerowany HTML jest następnie zapisywany do pliku `artykul.html`, który jest pobierany automatycznie.
+
+### Funkcjonalności:
+- Ładowanie artykułu z pliku `.txt`.
+- Przetwarzanie artykułu na HTML za pomocą OpenAI API.
+- Automatyczne dodawanie tagów `<img>` dla miejsc na grafiki, z odpowiednimi atrybutami `alt`.
+- Zapis wygenerowanego HTML do pliku `artykul.html`.
+
+## Jak działa aplikacja?
+
+1. **Wczytanie artykułu**: Użytkownik wybiera plik `.txt` z treścią artykułu.
+2. **Wysyłanie zapytania do OpenAI**: Treść artykułu jest przesyłana do OpenAI API, gdzie na podstawie podanego promptu (instrukcji) generowany jest kod HTML.
+3. **Wygenerowanie HTML**: OpenAI przetwarza artykuł, dodając odpowiednią strukturę HTML, tagi `<img>` w miejscach, w których mogą znaleźć się obrazy, oraz podpisy pod tymi obrazkami.
+4. **Automatyczne pobranie pliku HTML**: Po otrzymaniu przetworzonego HTML, pobierany jest plik `artykul.html`.
+
+## Instrukcja uruchomienia
+
+### Wymagania:
+- Przeglądarka internetowa (np. Chrome, Firefox).
+- Klucz API OpenAI
+
+### Krok 1: Przygotowanie
+1. **Zdobądź klucz API OpenAI**:
+   - Zarejestruj się lub zaloguj na [OpenAI](https://platform.openai.com/).
+   - Skopiuj swój klucz API.
+
+2. **Pobierz pliki projektu**:
+   - Skopiuj pliki aplikacji na swoje lokalne urządzenie lub sklonuj repozytorium.
+
+### Krok 2: Konfiguracja
+1. **Wstaw swój klucz API**:
+   - W pliku `main.js` zamień "YOUR API KEY" na swój klucz API OpenAI:
+
+### Krok 3: Uruchomienie aplikacji
+1. **Otwórz plik HTML w przeglądarce**:
+   - Otwórz plik `index.html` w swojej przeglądarce internetowej. Nie musisz instalować żadnych dodatkowych narzędzi, ponieważ aplikacja działa lokalnie w przeglądarce.
+   
+2. **Wczytaj artykuł**:
+   - Kliknij przycisk "Wybierz plik", aby wybrać plik `.txt` z artykułem, który chcesz przetworzyć.
+
+3. **Przetwarzanie artykułu**:
+   - Naciśnij przycisk "Wyślij do OpenAI" aplikacja wyśle treść artykułu do OpenAI i wygeneruje kod HTML, który zostanie zapisany w pliku `artykul.html`.
+
+4. **Pobierz plik HTML**:
+   - Po przetworzeniu artykułu, plik `artykul.html`zostanie automatycznie pobrany.
+
+## Technologie
+
+- **HTML**: Struktura strony.
+- **JavaScript**: Logika aplikacji, interakcja z API OpenAI.
+- **OpenAI API**: Wykorzystanie sztucznej inteligencji do generowania HTML.
