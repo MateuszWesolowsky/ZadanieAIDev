@@ -15,8 +15,13 @@ sendButton.addEventListener("click", () => {
   }
 });
 const processFile = async (file) => {
-  const articleText = await readTextFile(file);
-  const htmlContent = await generateHtmlContent(articleText);
+  try {
+    const articleText = await readTextFile(file);
+    const htmlContent = await generateHtmlContent(articleText);
+    saveToFile(htmlContent);
+  } catch (error) {
+    console.error("Wystąpił błąd:", error);
+  }
 };
 
 const readTextFile = async (file) => {
@@ -37,26 +42,56 @@ const generateHtmlContent = async (articleText) => {
           wstawienia pomiędzy tagami <body> i </body>. Nie dołączaj znaczników <html>,
           <head> ani <body>.`;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "Jesteś pomocnym asystentem konwertującym tekst na HTML.",
-        },
-        { role: "user", content: `${prompt}\n\n${articleText}` },
-      ],
-      max_tokens: 1500,
-      temperature: 0.7,
-    }),
-  });
+  sendButton.classList.add("loading");
+  sendButton.setAttribute("disabled", "true");
+  sendButton.textContent = "Pobieranie pliku..";
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "Jesteś pomocnym asystentem konwertującym tekst na HTML.",
+          },
+          { role: "user", content: `${prompt}\n\n${articleText}` },
+        ],
+        max_tokens: 1500,
+        temperature: 0.7,
+      }),
+    });
+
+    if (response.status === 200) {
+      sendButton.classList.remove("loading");
+      sendButton.setAttribute("disabled", "false");
+      sendButton.textContent = "Wyślij do OpenAI";
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+    } else {
+      throw new Error("Błąd w odpowiedzi z API");
+    }
+  } catch (error) {
+    console.error(error);
+    sendButton.classList.remove("loading");
+    sendButton.setAttribute("disabled", "false");
+    sendButton.textContent = "Wyślij do OpenAI";
+  }
 
   const data = await response.json();
   return data.choices[0].message.content;
+};
+
+const saveToFile = (content, filename = "artykul.html") => {
+  const blob = new Blob([content], { type: "text/html" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
 };
