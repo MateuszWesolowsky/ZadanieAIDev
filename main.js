@@ -16,5 +16,14 @@ sendButton.addEventListener("click", () => {
 });
 
 const processFile = async (file) => {
-  console.log("test");
+  const articleText = await readTextFile(file);
+};
+
+const readTextFile = async (file) => {
+  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
 };
